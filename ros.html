@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>应急智慧学习工厂</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="icon" href="img/logo.png" type="image/x-icon">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#36CFC9',
+                        neutral: '#F5F7FA',
+                        dark: '#1E293B',
+                        light: '#F8FAFC'
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .card-hover {
+                @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+            }
+            .section-padding {
+                @apply py-16 px-4 md:px-8 lg:px-12;
+            }
+            .nav-shadow {
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            }
+            .nav-link {
+                @apply relative px-4 py-2 text-gray-600 hover:text-primary transition-colors duration-300;
+            }
+            .nav-link.active {
+                @apply text-primary font-medium;
+            }
+            .nav-link.active::after {
+                @apply content-[''] absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3 h-1 bg-primary rounded-full;
+            }
+        }
+    </style>
+</head>
+<body class="font-inter bg-gray-50 text-gray-800">
+    <!-- 导航栏（与首页保持一致） -->
+    <header class="sticky top-0 z-50 bg-white nav-shadow transition-all duration-300">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16 md:h-20">
+                <!-- 品牌标识 -->
+                <div class="flex items-center">
+                    <a href="#" class="flex items-center">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 bg-transparent">
+                            <img src="img/logo.png" alt="实验室图标" class="w-9 h-9 object-contain">
+                        </div>
+                        <span class="text-xl font-bold text-gray-800">E & T Innovation Lab</span>
+                    </a>
+                </div>
+                
+                <!-- 桌面端导航链接 -->
+                <nav class="hidden md:flex items-center space-x-1">
+                    <a href="index.html" class="nav-link">首页</a>
+                    <a href="#" class="nav-link active">机器人组</a>
+                    <a href="qrs.html" class="nav-link">嵌入式组</a>
+                    <a href="ai.html" class="nav-link">AI组</a>
+                    <a href="vr.html" class="nav-link">VR组</a>
+                </nav>
+                
+                <!-- 移动端菜单按钮 -->
+                <div class="md:hidden">
+                    <button id="menu-toggle" class="text-gray-600 hover:text-primary focus:outline-none">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 移动端导航菜单 -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="container mx-auto px-4 py-3 space-y-2">
+                <a href="#" class="block nav-link">首页</a>
+                <a href="#" class="block nav-link active">机器人组</a>
+                <a href="#" class="block nav-link">嵌入式组</a>
+                <a href="#" class="block nav-link">AI组</a>
+                <a href="#" class="block nav-link">VR组</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 英雄区域 -->
+   
+    <section class="bg-cover bg-center bg-no-repeat text-white relative" style="background-image: url('img/ros_bg.png');">
+    
+        <div class="absolute inset-0 bg-black/40 z-0"></div>
+    
+        <div class="container mx-auto section-padding relative z-10">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold mb-6 text-shadow">突破未来</h1>
+                <h2 class="text-[clamp(1.2rem,3vw,1.8rem)] mb-8">机器人组工作汇报</h2>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-4 text-lg">
+                    <span><i class="fa fa-user mr-2"></i>汇报人：侯景皓</span>
+                    <span><i class="fa fa-calendar mr-2"></i>日期：12月1日</span>
+                    <span><i class="fa fa-map-marker mr-2"></i>地点：中国·燕郊</span>
+                </div>
+                <p class="mt-8 text-xl bg-white/10 backdrop-blur-sm py-4 px-6 rounded-lg inline-block">智慧机器 助力应急</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 学习内容 -->
+    <section class="bg-white section-padding">
+        <div class="container mx-auto">
+            <div class="max-w-3xl mx-auto mb-12 text-center">
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4 text-primary">01 学习内容</h2>
+                <p class="text-gray-600 text-lg">机器人学是计算机科学与工程的跨学科分支，集成多领域技术，致力于设计帮助和协助人类的智能机器</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- ROS -->
+                <div class="bg-light rounded-xl p-6 shadow card-hover border border-gray-100">
+                    <div class="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fa fa-wrench text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">ROS</h3>
+                    <p class="text-gray-600 mb-4">Robot Operating System（机器人操作系统），为机器人开发提供灵活框架</p>
+                    <div class="text-primary font-medium flex items-center">
+                        <span>深入了解</span>
+                        <i class="fa fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+
+                <!-- 嵌入式系统 -->
+                <div class="bg-light rounded-xl p-6 shadow card-hover border border-gray-100">
+                    <div class="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fa fa-microchip text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">嵌入式系统</h3>
+                    <p class="text-gray-600 mb-4">以应用为中心，可灵活裁剪软硬件模块的专用计算机系统，是机器人控制核心</p>
+                    <div class="text-primary font-medium flex items-center">
+                        <span>深入了解</span>
+                        <i class="fa fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+
+                <!-- 机械设计&电机控制 -->
+                <div class="bg-light rounded-xl p-6 shadow card-hover border border-gray-100">
+                    <div class="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fa fa-cogs text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">机械设计&电机控制</h3>
+                    <p class="text-gray-600 mb-4">针对不同机器人结构进行机械设计及仿真，研发FOC等电机控制算法</p>
+                    <div class="text-primary font-medium flex items-center">
+                        <span>深入了解</span>
+                        <i class="fa fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+
+                <!-- SLAM、导航算法 -->
+                <div class="bg-light rounded-xl p-6 shadow card-hover border border-gray-100">
+                    <div class="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fa fa-map text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">SLAM、导航算法</h3>
+                    <p class="text-gray-600 mb-4">即时定位与地图构建（SLAM）技术，实现机器人自主定位、导航与避障</p>
+                    <div class="text-primary font-medium flex items-center">
+                        <span>深入了解</span>
+                        <i class="fa fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 项目&成果 -->
+    <section class="bg-gray-50 section-padding">
+        <div class="container mx-auto">
+            <div class="max-w-3xl mx-auto mb-12 text-center">
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4 text-primary">02 项目&成果</h2>
+                <p class="text-gray-600 text-lg">聚焦应急场景，研发多款智能机器人产品，解决实际应用中的技术难题</p>
+            </div>
+
+            <!-- 项目展示 -->
+            <div class="space-y-16">
+                <!-- 应急仿生智能四足机器人 -->
+                <div class="bg-white rounded-2xl shadow overflow-hidden">
+                    <div class="grid grid-cols-1 lg:grid-cols-2">
+                        <div class="p-8 md:p-12 flex flex-col justify-center">
+                            <span class="inline-block px-4 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">重点项目</span>
+                            <h3 class="text-2xl md:text-3xl font-bold mb-6">通用应急仿生智能四足机器人</h3>
+                            <ul class="space-y-4 mb-8">
+                                <li class="flex items-start">
+                                    <i class="fa fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                    <span>应急特化模块设计、结构简单可靠，适应复杂应急环境</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                    <span>强大感知系统，搭载激光雷达与深度相机，实现精准环境感知</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                    <span>机载100TOPS高算力计算机，支持复杂算法实时运行</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                    <span>高精度、高扭矩密度国产先进电机，确保运动性能稳定</span>
+                                </li>
+                            </ul>
+                            <a href="#" class="inline-flex items-center px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                                <span>查看详情</span>
+                                <i class="fa fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                        <div class="bg-gray-100 flex items-center justify-center p-4">
+                            <img src="img/ros1.png" alt="应急仿生智能四足机器人" class="rounded-lg shadow-md max-h-96 object-cover">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 应急智能车 -->
+                <div class="bg-white rounded-2xl shadow overflow-hidden">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 lg:grid-flow-dense">
+                        <div class="lg:col-start-2 p-8 md:p-12 flex flex-col justify-center">
+                            <span class="inline-block px-4 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">训练与侦查</span>
+                            <h3 class="text-2xl md:text-3xl font-bold mb-6">应急智能车系列</h3>
+                            <div class="space-y-8">
+                                <div>
+                                    <h4 class="text-xl font-semibold mb-3">应急智能训练车</h4>
+                                    <p class="text-gray-600">搭载计算机、IMU、激光雷达的四驱麦克纳姆轮小车，实现基础导航和SLAM算法，用于对初学者的训练学习</p>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-semibold mb-3">应急智能侦查车</h4>
+                                    <p class="text-gray-600">通过车载陀螺仪、激光雷达、深度相机计算机，实现导航、避障和SLAM算法，用于特殊场景的环境侦查</p>
+                                </div>
+                            </div>
+                            <a href="#" class="mt-6 inline-flex items-center px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                                <span>查看详情</span>
+                                <i class="fa fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                        <div class="lg:col-start-1 bg-gray-100 flex items-center justify-center p-4">
+                            <img src="img/ros2.png" alt="应急智能车" class="rounded-lg shadow-md max-h-96 object-cover">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROS蜂群智能车 -->
+                <div class="bg-white rounded-2xl shadow overflow-hidden">
+                    <div class="grid grid-cols-1 lg:grid-cols-2">
+                        <div class="p-8 md:p-12 flex flex-col justify-center">
+                            <span class="inline-block px-4 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">群体智能</span>
+                            <h3 class="text-2xl md:text-3xl font-bold mb-6">ROS蜂群智能车</h3>
+                            <ul class="space-y-4 mb-8">
+                                <li class="flex items-start">
+                                    <i class="fa fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                    <span>搭载ESP32S3N16R8微控制器，丰富外设接口，强大神经网络和信号处理能力</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                    <span>支持WiFi、蓝牙透传，3D打印一体成型机身，智慧头脑与紧凑身材兼备</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                    <span>依靠MQTT通信协议作为ROS子节点控制，实现分布式协同</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                    <span>搭载陀螺仪、电机编码器，实现蜂群式移动探寻与协同作业</span>
+                                </li>
+                            </ul>
+                            <a href="#" class="inline-flex items-center px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                                <span>查看详情</span>
+                                <i class="fa fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                        <div class="bg-gray-100 flex items-center justify-center p-4">
+                            <img src="img/ros3.png" alt="ROS蜂群智能车" class="rounded-lg shadow-md max-h-96 object-cover">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 获奖情况 -->
+            <div class="mt-20">
+                <h3 class="text-2xl font-bold mb-8 text-center">获奖情况</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- 奖项1 -->
+                    <div class="bg-white rounded-xl p-6 shadow card-hover border border-gray-100">
+                        <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="fa fa-trophy text-yellow-500 text-xl"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-2">全国大学生智能汽车竞赛</h4>
+                        <p class="text-gray-600 mb-3">第十八届全国大学生智能汽车竞赛分赛区选拔赛讯飞智慧农业组 三等奖</p>
+                        <p class="text-sm text-gray-500">获奖人：侯景皓 | 2023年</p>
+                    </div>
+
+                    <!-- 奖项2 -->
+                    <div class="bg-white rounded-xl p-6 shadow card-hover border border-gray-100">
+                        <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="fa fa-trophy text-yellow-500 text-xl"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-2">MathorCup高校数学建模挑战赛</h4>
+                        <p class="text-gray-600 mb-3">第十三届MathorCup高校数学建模挑战赛本科生组 三等奖</p>
+                        <p class="text-sm text-gray-500">获奖人：侯景皓、陶志乐、潘卓霄 | 2023年</p>
+                    </div>
+
+                    <!-- 奖项3 -->
+                    <div class="bg-white rounded-xl p-6 shadow card-hover border border-gray-100">
+                        <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="fa fa-trophy text-yellow-500 text-xl"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-2">全国高校商务英语竞赛</h4>
+                        <p class="text-gray-600 mb-3">第七届全国高校商务英语竞赛决赛非专业组 特等奖</p>
+                        <p class="text-sm text-gray-500">获奖人：侯景皓 | 2023年</p>
+                    </div>
+
+                    <!-- 奖项4 -->
+                    <div class="bg-white rounded-xl p-6 shadow card-hover border border-gray-100">
+                        <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="fa fa-trophy text-yellow-500 text-xl"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-2">Asia and Pacific Mathematical Contest in Modeling</h4>
+                        <p class="text-gray-600 mb-3">亚太地区数学建模竞赛本科生组 三等奖</p>
+                        <p class="text-sm text-gray-500">获奖人：侯景皓、潘卓霄、陶志乐 | 2022年</p>
+                    </div>
+
+                    <!-- 奖项5 -->
+                    <div class="bg-white rounded-xl p-6 shadow card-hover border border-gray-100">
+                        <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="fa fa-trophy text-yellow-500 text-xl"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-2">河北省大学生节能减排竞赛</h4>
+                        <p class="text-gray-600 mb-3">"先控杯"2023年河北省大学生节能减排竞赛 三等奖</p>
+                        <p class="text-sm text-gray-500">作品：零碳排放边缘工业粉尘废气监测及处理系统 | 2023年</p>
+                    </div>
+
+                    <!-- 奖项6 -->
+                    <div class="bg-white rounded-xl p-6 shadow card-hover border border-gray-100">
+                        <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="fa fa-trophy text-yellow-500 text-xl"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-2">"挑战杯"河北省大学生课外学术科技作品竞赛</h4>
+                        <p class="text-gray-600 mb-3">2023年"挑战杯"河北省大学生课外学术科技作品竞赛 三等奖</p>
+                        <p class="text-sm text-gray-500">作品：智慧抚育车智能监控与智能系统 | 2023年</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 预期目标 -->
+    <section class="bg-white section-padding">
+        <div class="container mx-auto">
+            <div class="max-w-3xl mx-auto mb-12 text-center">
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4 text-primary">03 预期目标</h2>
+                <p class="text-gray-600 text-lg">乘势而上 再接再厉，在现有基础上持续优化升级，追求技术突破</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- 机器狗优化目标 -->
+                <div class="bg-light rounded-xl p-8 shadow card-hover border border-gray-100">
+                    <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6 mx-auto">
+                        <i class="fa fa-paw text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 text-center">机器狗优化</h3>
+                    <ul class="space-y-3 text-gray-600">
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-primary mt-1 mr-2"></i>
+                            <span>完善通信和供电系统，提升稳定性</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-primary mt-1 mr-2"></i>
+                            <span>重构电机控制节点，优化控制精度</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-primary mt-1 mr-2"></i>
+                            <span>优化步态决策算法，提升运动流畅性</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-primary mt-1 mr-2"></i>
+                            <span>改进机械结构，提高合理性和耐用性</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 蜂群车优化目标 -->
+                <div class="bg-light rounded-xl p-8 shadow card-hover border border-gray-100">
+                    <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6 mx-auto">
+                        <i class="fa fa-sitemap text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 text-center">蜂群车优化</h3>
+                    <ul class="space-y-3 text-gray-600">
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-primary mt-1 mr-2"></i>
+                            <span>优化电路结构，降低功耗提高可靠性</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-primary mt-1 mr-2"></i>
+                            <span>增加多种通信方式，提升抗干扰能力</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-primary mt-1 mr-2"></i>
+                            <span>优化群体协同算法，提高作业效率</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-primary mt-1 mr-2"></i>
+                            <span>扩展传感器模块，增强环境适应能力</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 智能车优化目标 -->
+                <div class="bg-light rounded-xl p-8 shadow card-hover border border-gray-100">
+                    <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6 mx-auto">
+                        <i class="fa fa-car text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 text-center">智能车优化</h3>
+                    <ul class="space-y-3 text-gray-600">
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-primary mt-1 mr-2"></i>
+                            <span>提升SLAM算法精度，适应复杂环境</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-primary mt-1 mr-2"></i>
+                            <span>优化导航避障策略，提高安全性</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-primary mt-1 mr-2"></i>
+                            <span>增强硬件集成度，减小设备体积</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-angle-right text-primary mt-1 mr-2"></i>
+                            <span>开发更多应用场景，扩展使用范围</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-16 max-w-4xl mx-auto bg-primary/5 rounded-2xl p-8 border border-primary/10">
+                <div class="flex flex-col md:flex-row items-center gap-6">
+                    <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
+                        <i class="fa fa-bullseye text-primary text-3xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold mb-3 text-primary">核心发展理念</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-gray-700">
+                            <div class="flex items-center">
+                                <i class="fa fa-check text-primary mr-2"></i>
+                                <span>戒骄戒躁</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fa fa-check text-primary mr-2"></i>
+                                <span>脚踏实地</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fa fa-check text-primary mr-2"></i>
+                                <span>通转融合</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fa fa-check text-primary mr-2"></i>
+                                <span>放飞思维</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fa fa-check text-primary mr-2"></i>
+                                <span>总结教训</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fa fa-check text-primary mr-2"></i>
+                                <span>分析原因</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   
+
+    <!-- 页脚（与首页保持一致） -->
+    <footer class="bg-gray-300 py-6">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <!-- 左侧文字 -->
+                <div class="text-gray-600 mb-4 md:mb-0">
+                    DESIGN by E&T Lab
+                </div>
+                
+                <!-- 右侧版权信息 -->
+                <div class="text-gray-600 flex flex-col md:flex-row items-center gap-2 md:gap-4">
+                    <span>Copyright © 2023</span>
+                    <a href="https://talentyui.github.io" target="_blank" class="text-primary hover:underline">talentyui.github.io</a>
+                    <span>|</span>
+                    <a href="https://beian.miit.gov.cn" target="_blank" class="text-primary hover:underline">京ICP备2023003741号-2</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 移动端菜单切换
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // 导航链接激活状态切换
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        });
+        
+        // 滚动时导航栏样式变化
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 10) {
+                header.classList.add('bg-white/95', 'backdrop-blur-sm');
+                header.classList.remove('bg-white');
+            } else {
+                header.classList.add('bg-white');
+                header.classList.remove('bg-white/95', 'backdrop-blur-sm');
+            }
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // 移动端菜单关闭
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

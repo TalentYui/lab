@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>应急智慧学习工厂</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="icon" href="img/logo.png" type="image/x-icon">
+  <!-- 配置Tailwind自定义颜色和字体（与首页一致） -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#165DFF',
+            secondary: '#36CFC9',
+            neutral: '#F5F7FA',
+          },
+          fontFamily: {
+            inter: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .nav-shadow {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      }
+      .nav-link {
+        @apply relative px-4 py-2 text-gray-600 hover:text-primary transition-colors duration-300;
+      }
+      .nav-link.active {
+        @apply text-primary font-medium;
+      }
+      .nav-link.active::after {
+        @apply content-[''] absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3 h-1 bg-primary rounded-full;
+      }
+      /* 卡片悬停效果 */
+      .card-hover {
+        @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+      }
+      /* 图片缩放效果 */
+      .img-zoom {
+        @apply transition-transform duration-500 hover:scale-105;
+      }
+      /* 章节内边距 */
+      .section-padding {
+        @apply py-16 px-4 md:px-8 lg:px-12;
+      }
+      /* 内容宽度调整 */
+      .content-container {
+        @apply w-full max-w-6xl mx-auto;
+      }
+    }
+  </style>
+</head>
+<body class="font-inter bg-gray-50">
+  <!-- 导航栏（与首页完全一致） -->
+  <header class="sticky top-0 z-50 bg-white nav-shadow transition-all duration-300">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16 md:h-20">
+        <!-- 品牌标识 -->
+        <div class="flex items-center">
+          <a href="#" class="flex items-center">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 bg-transparent">
+              <img src="img/logo.png" alt="实验室图标" class="w-9 h-9 object-contain">
+            </div>
+            <span class="text-xl font-bold text-gray-800">E & T Innovation Lab</span>
+          </a>
+        </div>
+        
+        <!-- 桌面端导航链接（嵌入式组设为激活状态） -->
+        <nav class="hidden md:flex items-center space-x-1">
+          <a href="index.html" class="nav-link">首页</a>
+          <a href="ros.html" class="nav-link">机器人组</a>
+          <a href="#" class="nav-link active">嵌入式组</a>
+          <a href="ai.html" class="nav-link">AI组</a>
+          <a href="vr.html" class="nav-link">VR组</a>
+        </nav>
+        
+        <!-- 移动端菜单按钮 -->
+        <div class="md:hidden">
+          <button id="menu-toggle" class="text-gray-600 hover:text-primary focus:outline-none">
+            <i class="fa fa-bars text-xl"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 移动端导航菜单（嵌入式组设为激活状态） -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+      <div class="container mx-auto px-4 py-3 space-y-2">
+        <a href="#" class="block nav-link">首页</a>
+        <a href="#" class="block nav-link">机器人组</a>
+        <a href="#" class="block nav-link active">嵌入式组</a>
+        <a href="#" class="block nav-link">AI组</a>
+        <a href="#" class="block nav-link">VR组</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 嵌入式组头部横幅 -->
+  <section class="bg-cover bg-center bg-no-repeat text-white relative" style="background-image: url('img/qrs_bg.png');">
+    
+        <div class="absolute inset-0 bg-black/40 z-0"></div>
+    
+        <div class="container mx-auto section-padding relative z-10">
+            <div class="content-container text-center">
+                <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold mb-6 text-shadow">世界，开创梦想</h1>
+                <h2 class="text-[clamp(1.2rem,3vw,1.8rem)] mb-8">嵌入式组工作汇报</h2>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-4 text-lg">
+                    <span><i class="fa fa-user mr-2"></i>汇报人：芦佳楠</span>
+                    
+                </div>
+               
+            </div>
+        </div>
+    </section>
+
+  <!-- 主要内容区 -->
+  <main class="container mx-auto px-4 py-16">
+    
+
+    <!-- 一、阶段工作概述 -->
+    <section id="phase-overview" class="content-container mb-24">
+      <div class="flex items-center mb-8">
+        <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-bold mr-4">壹</div>
+        <h2 class="text-3xl font-bold text-gray-800">阶段工作概述</h2>
+      </div>
+
+      <!-- 什么是嵌入式 -->
+      <div class="bg-white rounded-xl shadow-sm p-6 md:p-8 mb-12">
+        <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+          <i class="fa fa-book text-primary mr-3"></i>什么是嵌入式
+        </h3>
+        <p class="text-gray-600 mb-6 leading-relaxed">
+          嵌入式系统是以应用为中心，以计算机技术为基础，软硬件可裁剪，适应应用系统对功能、可靠性、成本、体积、功耗等严格要求的专用计算机系统。嵌入式技术的特点就是将硬件和软件相结合，综合人工智能技术，推动物联网中智能环境的实现。
+        </p>
+        <div class="bg-neutral rounded-lg p-4 flex justify-center">
+          <img src="img/qrs1.png" alt="Arduino开发板" class="max-w-full h-auto rounded shadow-sm max-h-64">
+        </div>
+      </div>
+
+      
+    </section>
+
+    <!-- 二、工作完成情况 -->
+    <section id="work-completion" class="content-container mb-24">
+      <div class="flex items-center mb-8">
+        <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-bold mr-4">贰</div>
+        <h2 class="text-3xl font-bold text-gray-800">工作完成情况</h2>
+      </div>
+
+      <!-- 学习进度卡片 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <!-- Arduino学习完成 -->
+        <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+          <div class="flex justify-between items-start mb-4">
+            <h3 class="font-semibold text-gray-800">Arduino学习</h3>
+            <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">已完成</span>
+          </div>
+          <p class="text-gray-600 text-sm mb-4">
+            小组成员已经完成Arduino的学习任务，开始进行基于Arduino开发板的蜂群小车的制作。
+          </p>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div class="bg-primary h-2.5 rounded-full" style="width: 100%"></div>
+          </div>
+        </div>
+
+        <!-- C语言学习完成 -->
+        <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+          <div class="flex justify-between items-start mb-4">
+            <h3 class="font-semibold text-gray-800">编程语言学习</h3>
+            <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">已完成</span>
+          </div>
+          <p class="text-gray-600 text-sm mb-4">
+            目前，小组成员已经完成C语言基础的学习，可以熟练使用C语言进行代码编写，达到后续学习要求。
+          </p>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div class="bg-primary h-2.5 rounded-full" style="width: 100%"></div>
+          </div>
+        </div>
+
+        <!-- STM32学习进行中 -->
+        <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+          <div class="flex justify-between items-start mb-4">
+            <h3 class="font-semibold text-gray-800">STM32单片机学习</h3>
+            <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">进行中</span>
+          </div>
+          <p class="text-gray-600 text-sm mb-4">
+            小组成员开始学习STM32单片机的基础内容，为后续制作更复杂项目打下坚实基础。
+          </p>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div class="bg-primary h-2.5 rounded-full" style="width: 60%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 学习过程展示（替换原项目成果，新增4张配图） -->
+      <div class="bg-white rounded-xl shadow-sm p-6 md:p-8">
+        <h3 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+          <i class="fa fa-clock-o text-primary mr-3"></i>学习过程展示
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- 学习过程1：C语言基础学习 -->
+          <div class="rounded-xl overflow-hidden shadow-sm card-hover">
+            <div class="h-48 overflow-hidden bg-neutral flex items-center justify-center">
+              <img src="img/qrs5.png" alt="C语言基础学习" class="w-full h-full object-cover img-zoom">
+            </div>
+            <div class="p-4">
+              <h4 class="font-semibold text-gray-800 mb-2">C语言基础学习</h4>
+              <p class="text-sm text-gray-600">
+                通过编程练习、语法实践，掌握变量、指针、函数等核心知识点，完成基础代码编写任务。
+              </p>
+            </div>
+          </div>
+
+          <!-- 学习过程2：Arduino开发板实践 -->
+          <div class="rounded-xl overflow-hidden shadow-sm card-hover">
+            <div class="h-48 overflow-hidden bg-neutral flex items-center justify-center">
+              <img src="img/qrs3.png" alt="Arduino开发板实践" class="w-full h-full object-cover img-zoom">
+            </div>
+            <div class="p-4">
+              <h4 class="font-semibold text-gray-800 mb-2">Arduino开发板实践</h4>
+              <p class="text-sm text-gray-600">
+                实操Arduino开发板，完成LED闪烁、传感器数据读取等基础实验，掌握硬件连接与代码烧录流程。
+              </p>
+            </div>
+          </div>
+
+          <!-- 学习过程3：电烙铁焊接训练 -->
+          <div class="rounded-xl overflow-hidden shadow-sm card-hover">
+            <div class="h-48 overflow-hidden bg-neutral flex items-center justify-center">
+              <img src="img/qrs2.png" alt="电烙铁焊接训练" class="w-full h-full object-cover img-zoom">
+            </div>
+            <div class="p-4">
+              <h4 class="font-semibold text-gray-800 mb-2">电烙铁焊接训练</h4>
+              <p class="text-sm text-gray-600">
+                学习使用电烙铁进行元器件焊接，练习小车电路组装，提升硬件动手能力与焊接工艺水平。
+              </p>
+            </div>
+          </div>
+
+          <!-- 学习过程4：STM32基础实验 -->
+          <div class="rounded-xl overflow-hidden shadow-sm card-hover">
+            <div class="h-48 overflow-hidden bg-neutral flex items-center justify-center">
+              <img src="img/qrs4.png" alt="STM32基础实验" class="w-full h-full object-cover img-zoom">
+            </div>
+            <div class="p-4">
+              <h4 class="font-semibold text-gray-800 mb-2">STM32基础实验</h4>
+              <p class="text-sm text-gray-600">
+                入门STM32单片机外设接口使用，完成GPIO控制、定时器中断等实验，理解嵌入式进阶开发逻辑。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 补充学习过程说明 -->
+        <div class="mt-8 p-4 bg-neutral rounded-lg">
+          <p class="text-gray-700 text-sm">
+            <i class="fa fa-info-circle text-primary mr-2"></i>
+            学习过程遵循"理论-实践-复盘"模式：先掌握基础理论知识，再通过硬件实操验证理论，最后总结问题与优化方向，逐步构建嵌入式开发能力体系。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 三、未来工作计划 -->
+  <section id="future-plan" class="content-container mb-16">
+    <div class="flex items-center mb-8">
+      <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-bold mr-4">叁</div>
+      <h2 class="text-3xl font-bold text-gray-800">未来工作计划</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- 深入学习STM32单片机 -->
+      <div class="bg-white rounded-xl shadow-sm p-6 md:p-8 card-hover">
+        <div class="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
+          <i class="fa fa-microchip text-primary text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">深入学习STM32单片机</h3>
+        <p class="text-gray-600 mb-4">
+          学习STM32丰富的外设接口，学会利用其强大的处理能力来进行电机控制、工业自动化、人机界面、农业联网、家居联网等嵌入式应用开发。
+        </p>
+        <div class="flex items-center text-primary">
+          <span class="text-sm">进阶技能提升</span>
+          <i class="fa fa-arrow-right ml-2"></i>
+        </div>
+      </div>
+
+      <!-- 嵌入式Linux系统开发 -->
+      <div class="bg-white rounded-xl shadow-sm p-6 md:p-8 card-hover">
+        <div class="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
+          <i class="fa fa-linux text-primary text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">嵌入式Linux系统开发</h3>
+        <p class="text-gray-600 mb-4">
+          熟悉使用Linux下的C语言开发环境，并学习制作Linux环境下的嵌入式应用，拓展嵌入式开发的深度与广度。
+        </p>
+        <div class="flex items-center text-primary">
+          <span class="text-sm">系统级开发</span>
+          <i class="fa fa-arrow-right ml-2"></i>
+        </div>
+      </div>
+
+      <!-- RTOS的学习 -->
+      <div class="bg-white rounded-xl shadow-sm p-6 md:p-8 card-hover">
+        <div class="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
+          <i class="fa fa-tasks text-primary text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">RTOS的学习</h3>
+        <p class="text-gray-600 mb-4">
+          熟悉实时操作系统，熟练掌握多任务管理、调度算法、消息队列等核心知识点，提升复杂嵌入式系统开发能力。
+        </p>
+        <div class="flex items-center text-primary">
+          <span class="text-sm">多任务处理</span>
+          <i class="fa fa-arrow-right ml-2"></i>
+        </div>
+      </div>
+
+      <!-- 项目制作与竞赛参与 -->
+      <div class="bg-white rounded-xl shadow-sm p-6 md:p-8 card-hover">
+        <div class="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
+          <i class="fa fa-trophy text-primary text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">项目制作与竞赛</h3>
+        <p class="text-gray-600 mb-4">
+          进行个人兴趣项目开发，参与大学生创新创业大赛、数学建模、蓝桥杯等比赛，以赛促学提升综合能力。
+        </p>
+        <div class="flex items-center text-primary">
+          <span class="text-sm">实战能力检验</span>
+          <i class="fa fa-arrow-right ml-2"></i>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+  <!-- 页脚（与首页完全一致） -->
+<footer class="bg-gray-300 py-6">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row justify-between items-center">
+      <!-- 左侧文字 -->
+      <div class="text-gray-600 mb-4 md:mb-0">
+        DESIGN by E&T Lab
+      </div>
+      
+      <!-- 右侧版权信息 -->
+      <div class="text-gray-600 flex flex-col md:flex-row items-center gap-2 md:gap-4">
+        <span>Copyright © 2023</span>
+        <a href="https://talentyui.github.io" target="_blank" class="text-primary hover:underline">talentyui.github.io</a>
+        <span>|</span>
+        <a href="https://beian.miit.gov.cn" target="_blank" class="text-primary hover:underline">京ICP备2023003741号-2</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+  <script>
+    // 移动端菜单切换（与首页一致）
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+    
+    // 导航链接激活状态切换（与首页一致）
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        
+        if (!mobileMenu.classList.contains('hidden')) {
+          mobileMenu.classList.add('hidden');
+        }
+      });
+    });
+    
+    // 滚动时导航栏样式变化（与首页一致）
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('header');
+      if (window.scrollY > 10) {
+        header.classList.add('bg-white/95', 'backdrop-blur-sm');
+        header.classList.remove('bg-white');
+      } else {
+        header.classList.add('bg-white');
+        header.classList.remove('bg-white/95', 'backdrop-blur-sm');
+      }
+    });
+    
+    // 平滑滚动（新增，优化锚点跳转体验）
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

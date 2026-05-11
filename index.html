@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>应急智慧学习工厂</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="icon" href="img/logo.png" type="image/x-icon">
+  <!-- 配置Tailwind自定义颜色和字体 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#165DFF',
+            secondary: '#36CFC9',
+            neutral: '#F5F7FA',
+          },
+          fontFamily: {
+            inter: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .nav-shadow {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      }
+      .nav-link {
+        @apply relative px-4 py-2 text-gray-600 hover:text-primary transition-colors duration-300;
+      }
+      .nav-link.active {
+        @apply text-primary font-medium;
+      }
+      .nav-link.active::after {
+        @apply content-[''] absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3 h-1 bg-primary rounded-full;
+      }
+      
+      /* 立体轮播图样式 */
+      .stack-carousel {
+        position: relative;
+        width: 100%;
+        max-width: 800px;
+        height: 500px;
+        margin: 4rem auto;
+        perspective: 1200px;
+      }
+      
+      .stack-slide {
+        position: absolute;
+        width: 90%;
+        height: 90%;
+        left: 50%;
+        top: 50%;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        cursor: pointer;
+        box-shadow: 0 10px 50px rgba(0, 0, 0, 0.15);
+      }
+      
+      /* 堆叠状态样式 */
+      .stack-slide:not(.active) {
+        filter: brightness(0.85);
+      }
+      
+      .stack-slide.active {
+        z-index: 10;
+        transform: translate(-50%, -50%) scale(1);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+      }
+      
+      .stack-slide.prev {
+        z-index: 9;
+        transform: translate(-50%, -50%) scale(0.9) translateZ(-100px) translateX(-80px);
+      }
+      
+      .stack-slide.next {
+        z-index: 9;
+        transform: translate(-50%, -50%) scale(0.9) translateZ(-100px) translateX(80px);
+      }
+      
+      .stack-slide.prev-2 {
+        z-index: 8;
+        transform: translate(-50%, -50%) scale(0.8) translateZ(-200px) translateX(-160px);
+      }
+      
+      .stack-slide.next-2 {
+        z-index: 8;
+        transform: translate(-50%, -50%) scale(0.8) translateZ(-200px) translateX(160px);
+      }
+      
+      .stack-slide.hidden {
+        z-index: 1;
+        transform: translate(-50%, -50%) scale(0.7) translateZ(-300px);
+        opacity: 0;
+        pointer-events: none;
+      }
+      
+      .stack-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      
+      .stack-caption {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 2rem;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+        color: white;
+      }
+      
+      /* 控制区域容器 - 包含指示器和按钮 */
+      .carousel-controls-container {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        z-index: 20;
+      }
+      
+      /* 指示器样式 */
+      .stack-indicators {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+      }
+      
+      .stack-indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #ddd;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      
+      .stack-indicator.active {
+        background-color: #165DFF;
+        transform: scale(1.3);
+      }
+      
+      /* 按钮样式 */
+      .carousel-btn-group {
+        display: flex;
+        gap: 1rem;
+      }
+      
+      .carousel-btn {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: white;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      
+      .carousel-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+      }
+      
+      .carousel-btn i {
+        color: #165DFF;
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body class="font-inter bg-gray-50">
+  <!-- 导航栏 -->
+  <header class="sticky top-0 z-50 bg-white nav-shadow transition-all duration-300">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16 md:h-20">
+        <!-- 品牌标识 -->
+        <div class="flex items-center">
+          <a href="#" class="flex items-center">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 bg-transparent">
+              <img src="img/logo.png" alt="实验室图标" class="w-9 h-9 object-contain">
+            </div>
+            <span class="text-xl font-bold text-gray-800">E & T Innovation Lab</span>
+          </a>
+        </div>
+        
+        <!-- 桌面端导航链接 -->
+        <nav class="hidden md:flex items-center space-x-1">
+          <a href="#" class="nav-link active">首页</a>
+          <a href="ros.html" class="nav-link">机器人组</a>
+          <a href="qrs.html" class="nav-link">嵌入式组</a>
+          <a href="ai.html" class="nav-link">AI组</a>
+          <a href="vr.html" class="nav-link">VR组</a>
+        </nav>
+        
+        <!-- 移动端菜单按钮 -->
+        <div class="md:hidden">
+          <button id="menu-toggle" class="text-gray-600 hover:text-primary focus:outline-none">
+            <i class="fa fa-bars text-xl"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 移动端导航菜单 -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+      <div class="container mx-auto px-4 py-3 space-y-2">
+        <a href="#" class="block nav-link active">首页</a>
+        <a href="#" class="block nav-link">机器人组</a>
+        <a href="#" class="block nav-link">嵌入式组</a>
+        <a href="#" class="block nav-link">AI组</a>
+        <a href="#" class="block nav-link">VR组</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 立体堆叠轮播图 -->
+  <section class="py-8 px-4">
+    <div class="stack-carousel" id="stack-carousel">
+      <!-- 轮播项1 -->
+      <div class="stack-slide active" data-index="0">
+        <img src="img/横幅1.jpg" alt="实验室机器人项目展示" class="stack-image">
+        <div class="stack-caption">
+          <h3 class="text-2xl font-bold mb-2">应急智慧学习工厂</h3>
+          <p>产教融合、科教融合、技术创新、成果转化</p>
+        </div>
+      </div>
+      
+      <!-- 轮播项2 -->
+      <div class="stack-slide next" data-index="1">
+        <img src="img/横幅2.jpg" alt="嵌入式系统开发" class="stack-image">
+        <div class="stack-caption">
+          <h3 class="text-2xl font-bold mb-2">厚德启智 扶危安国</h3>
+          <p>应急管理大学（筹）</p>
+        </div>
+      </div>
+      
+      <!-- 轮播项3 -->
+      <div class="stack-slide next-2" data-index="2">
+        <img src="img/横幅3.jpg" alt="人工智能算法演示" class="stack-image">
+        <div class="stack-caption">
+          <h3 class="text-2xl font-bold mb-2">面向应急开放</h3>
+          <p>软硬件协同计算试验场</p>
+        </div>
+      </div>
+      
+      
+      
+      <!-- 轮播控制区域 - 包含指示器和按钮 -->
+      <div class="carousel-controls-container">
+        <!-- 轮播指示器 -->
+        <div class="stack-indicators" id="stack-indicators">
+          <div class="stack-indicator active" data-index="0"></div>
+          <div class="stack-indicator" data-index="1"></div>
+          <div class="stack-indicator" data-index="2"></div>
+          
+        </div>
+        
+        <!-- 轮播控制按钮 -->
+        <div class="carousel-btn-group">
+          <button class="carousel-btn prev-btn" id="stack-prev">
+            <i class="fa fa-chevron-left"></i>
+          </button>
+          <button class="carousel-btn next-btn" id="stack-next">
+            <i class="fa fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页面内容示例 -->
+  <main class="container mx-auto px-4 py-16">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">我们是设计师、工程师、梦想者</h1>
+    <p class="text-gray-600 mb-8 first-letter:ml-8">我们常常被称为“代码的魔术师”。但实际上，我们只是一个对技术充满热情的程序员。从大学时期开始，就沉迷于代码的世界，每当解决一个难题或完成一个项目时，都会感到无比的成就感。热爱挑战，无论是前端的交互设计还是后端的复杂算法，都乐于探索和学习。在这个快速发展的技术时代，始终保持对新技术的好奇心，不断地学习和进步。
+我们认为，分享知识和与他人合作是推动技术进步的关键。因此，我们经常在GitHub上分享我们的项目，并积极参与各种技术论坛和讨论。
+
+总之，我们是热爱技术、永不停歇的学习者。相信，只要有热情和努力，没有什么是不可能的。</p>
+    
+    <!-- 新增多图列表 -->
+    <div class="mb-16">
+      <h2 class="text-2xl font-semibold mb-6 text-gray-800">研究小组展示</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+     <!-- 机器人组 -->
+<a href="ros.html" class="block w-full h-auto no-underline">
+  <div class="group relative overflow-hidden rounded-xl shadow-md transition-all duration-300 hover:shadow-xl">
+    <img src="img/ros.jpg" alt="机器人组" class="w-full h-64 object-cover transition-transform-transform duration-500 group-hover:scale-110">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-6">
+      <h3 class="text-xl font-bold text-white mb-2">机器人组</h3>
+      <p class="text-gray-200 text-sm">专注于智能机器人研发、自主导航与运动控制技术</p>
+    </div>
+  </div>
+</a>
+
+<!-- 嵌入式组 -->
+<a href="qrs.html" class="block w-full h-auto no-underline">
+  <div class="group relative overflow-hidden rounded-xl shadow-md transition-all duration-300 hover:shadow-xl">
+    <img src="img/qrs.jpg" alt="嵌入式组" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-6">
+      <h3 class="text-xl font-bold text-white mb-2">嵌入式组</h3>
+      <p class="text-gray-200 text-sm">致力于低功耗嵌入式系统与物联网设备开发</p>
+    </div>
+  </div>
+</a>
+
+<!-- AI组 -->
+<a href="ai.html" class="block w-full h-auto no-underline">
+  <div class="group relative overflow-hidden rounded-xl shadow-md transition-all duration-300 hover:shadow-xl">
+    <img src="img/ai.png" alt="AI组" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-6">
+      <h3 class="text-xl font-bold text-white mb-2">AI组</h3>
+      <p class="text-gray-200 text-sm">专注于机器学习算法研究与人工智能应用落地</p>
+    </div>
+  </div>
+</a>
+
+<!-- VR组 -->
+<a href="vr.html" class="block w-full h-auto no-underline">
+  <div class="group relative overflow-hidden rounded-xl shadow-md transition-all duration-300 hover:shadow-xl">
+    <img src="img/vr.png" alt="VR组" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-6">
+      <h3 class="text-xl font-bold text-white mb-2">VR组</h3>
+      <p class="text-gray-200 text-sm">研究虚拟现实与增强现实技术及沉浸式交互体验</p>
+    </div>
+  </div>
+</a>
+
+      </div>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+      <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+        <h2 class="text-xl font-semibold mb-4 text-primary">研究方向</h2>
+        <p class="text-gray-600">我们专注于人工智能、机器人技术、嵌入式系统和虚拟现实等领域的研究与创新，旨在解决实际应用中的技术难题。</p>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+        <h2 class="text-xl font-semibold mb-4 text-primary">成果展示</h2>
+        <p class="text-gray-600">实验室已在多个领域取得突破性进展，研发的多项技术已成功应用于教育、医疗和工业生产等实际场景。</p>
+      </div>
+    </div>
+    
+    
+  </main>
+
+  <script>
+    // 移动端菜单切换
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+    
+    // 导航链接激活状态切换
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        
+        if (!mobileMenu.classList.contains('hidden')) {
+          mobileMenu.classList.add('hidden');
+        }
+      });
+    });
+    
+    // 滚动时导航栏样式变化
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('header');
+      if (window.scrollY > 10) {
+        header.classList.add('bg-white/95', 'backdrop-blur-sm');
+        header.classList.remove('bg-white');
+      } else {
+        header.classList.add('bg-white');
+        header.classList.remove('bg-white/95', 'backdrop-blur-sm');
+      }
+    });
+    
+    // 立体堆叠轮播图功能实现
+    document.addEventListener('DOMContentLoaded', () => {
+      const carousel = document.getElementById('stack-carousel');
+      const slides = document.querySelectorAll('.stack-slide');
+      const prevBtn = document.getElementById('stack-prev');
+      const nextBtn = document.getElementById('stack-next');
+      const indicators = document.querySelectorAll('.stack-indicator');
+      let currentIndex = 0;
+      const totalSlides = slides.length;
+      
+      // 更新轮播状态
+      function updateCarousel() {
+        // 重置所有幻灯片的类
+        slides.forEach(slide => {
+          slide.className = 'stack-slide';
+        });
+        
+        // 计算各个位置的索引
+        const prev1Index = (currentIndex - 1 + totalSlides) % totalSlides;
+        const prev2Index = (currentIndex - 2 + totalSlides) % totalSlides;
+        const next1Index = (currentIndex + 1) % totalSlides;
+        const next2Index = (currentIndex + 2) % totalSlides;
+        
+        // 为不同位置的幻灯片添加相应的类
+        slides[currentIndex].classList.add('active');
+        slides[prev1Index].classList.add('prev');
+        slides[prev2Index].classList.add('prev-2');
+        slides[next1Index].classList.add('next');
+        slides[next2Index].classList.add('next-2');
+        
+        // 对于超过3个的幻灯片，隐藏其他的
+        if (totalSlides > 5) {
+          slides.forEach((slide, index) => {
+            if (index !== currentIndex && 
+                index !== prev1Index && 
+                index !== prev2Index && 
+                index !== next1Index && 
+                index !== next2Index) {
+              slide.classList.add('hidden');
+            }
+          });
+        }
+        
+        // 更新指示器
+        indicators.forEach((indicator, index) => {
+          if (index === currentIndex) {
+            indicator.classList.add('active');
+          } else {
+            indicator.classList.remove('active');
+          }
+        });
+      }
+      
+      // 下一张
+      function nextSlide() {
+        currentIndex = (currentIndex + 1) % totalSlides;
+        updateCarousel();
+      }
+      
+      // 上一张
+      function prevSlide() {
+        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+        updateCarousel();
+      }
+      
+      // 事件监听
+      nextBtn.addEventListener('click', nextSlide);
+      prevBtn.addEventListener('click', prevSlide);
+      
+      // 指示器点击事件
+      indicators.forEach(indicator => {
+        indicator.addEventListener('click', () => {
+          currentIndex = parseInt(indicator.dataset.index);
+          updateCarousel();
+        });
+      });
+      
+      // 点击幻灯片切换
+      slides.forEach(slide => {
+        slide.addEventListener('click', () => {
+          const index = parseInt(slide.dataset.index);
+          if (index !== currentIndex) {
+            currentIndex = index;
+            updateCarousel();
+          }
+        });
+      });
+      
+      // 自动轮播
+      let autoplayInterval = setInterval(nextSlide, 5000);
+      
+      // 鼠标悬停时暂停自动轮播
+      carousel.addEventListener('mouseenter', () => {
+        clearInterval(autoplayInterval);
+      });
+      
+      // 鼠标离开时恢复自动轮播
+      carousel.addEventListener('mouseleave', () => {
+        autoplayInterval = setInterval(nextSlide, 5000);
+      });
+      
+      // 初始化轮播
+      updateCarousel();
+    });
+  </script>
+
+
+
+  <!-- 页脚 -->
+<footer class="bg-gray-300 py-6">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row justify-between items-center">
+      <!-- 左侧文字 -->
+      <div class="text-gray-600 mb-4 md:mb-0">
+        DESIGN by E&T Lab
+      </div>
+      
+      <!-- 右侧版权信息 -->
+      <div class="text-gray-600 flex flex-col md:flex-row items-center gap-2 md:gap-4">
+        <span>Copyright © 2023</span>
+        <a href="https://talentyui.github.io" target="_blank" class="text-primary hover:underline">talentyui.github.io</a>
+        <span>|</span>
+        <a href="https://beian.miit.gov.cn" target="_blank" class="text-primary hover:underline">京ICP备2023003741号-2</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

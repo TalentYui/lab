@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>应急智慧学习工厂</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="icon" href="img/logo.png" type="image/x-icon">
+  <!-- 配置Tailwind自定义颜色和字体（与首页一致） -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#165DFF',
+            secondary: '#36CFC9',
+            neutral: '#F5F7FA',
+          },
+          fontFamily: {
+            inter: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .nav-shadow {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      }
+      .nav-link {
+        @apply relative px-4 py-2 text-gray-600 hover:text-primary transition-colors duration-300;
+      }
+      .nav-link.active {
+        @apply text-primary font-medium;
+      }
+      .nav-link.active::after {
+        @apply content-[''] absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3 h-1 bg-primary rounded-full;
+      }
+      /* 卡片悬停效果 */
+      .card-hover {
+        @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+      }
+      /* 图片缩放效果 */
+      .img-zoom {
+        @apply transition-transform duration-500 hover:scale-105;
+      }
+      /* 章节内边距 */
+      .section-padding {
+        @apply py-16 px-4 md:px-8 lg:px-12;
+      }
+      /* VR设备展示效果 */
+      .vr-device {
+        perspective: 1000px;
+      }
+      .vr-card {
+        transform-style: preserve-3d;
+        transition: transform 0.5s;
+      }
+      .vr-card:hover {
+        transform: rotateY(15deg);
+      }
+      /* 代码块样式（补充，与AI页保持一致） */
+      .code-block {
+        @apply bg-gray-900 text-gray-100 p-4 rounded-lg text-sm overflow-x-auto;
+      }
+    }
+  </style>
+</head>
+<body class="font-inter bg-gray-50">
+  <!-- 导航栏（与首页完全一致） -->
+  <header class="sticky top-0 z-50 bg-white nav-shadow transition-all duration-300">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16 md:h-20">
+        <!-- 品牌标识 -->
+        <div class="flex items-center">
+          <a href="#" class="flex items-center">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-3 bg-transparent">
+              <img src="img/logo.png" alt="实验室图标" class="w-9 h-9 object-contain">
+            </div>
+            <span class="text-xl font-bold text-gray-800">E & T Innovation Lab</span>
+          </a>
+        </div>
+        
+        <!-- 桌面端导航链接（VR组设为激活状态） -->
+        <nav class="hidden md:flex items-center space-x-1">
+          <a href="index.html" class="nav-link">首页</a>
+          <a href="ros.html" class="nav-link">机器人组</a>
+          <a href="qrs.html" class="nav-link">嵌入式组</a>
+          <a href="ai.html" class="nav-link">AI组</a>
+          <a href="#" class="nav-link active">VR组</a>
+        </nav>
+        
+        <!-- 移动端菜单按钮 -->
+        <div class="md:hidden">
+          <button id="menu-toggle" class="text-gray-600 hover:text-primary focus:outline-none">
+            <i class="fa fa-bars text-xl"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 移动端导航菜单（VR组设为激活状态） -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+      <div class="container mx-auto px-4 py-3 space-y-2">
+        <a href="#" class="block nav-link">首页</a>
+        <a href="#" class="block nav-link">机器人组</a>
+        <a href="#" class="block nav-link">嵌入式组</a>
+        <a href="#" class="block nav-link">AI组</a>
+        <a href="#" class="block nav-link active">VR组</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- VR组头部横幅 -->
+  <section class="relative h-[400px] md:h-[500px] overflow-hidden">
+    <img src="img/vr_bg.png" alt="人工智能技术" class="absolute inset-0 w-full h-full object-cover">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-20 h-full flex flex-col justify-center">
+      <div class="max-w-3xl">
+        <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-white mb-4">VR视界·未来已来</h1>
+        <h2 class="text-[clamp(1.2rem,3vw,1.8rem)] text-white/90 mb-6">VR组工作汇报</h2>
+        <div class="flex flex-col sm:flex-row gap-4 text-white/90 text-lg">
+          <span><i class="fa fa-user mr-2"></i>汇报人：韩影</span>
+          
+        </div>
+        <p class="mt-6 text-white/80 text-lg italic">
+          " VR视界，未来已来，你来不来 "
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 主要内容区：新增max-w-7xl防止超宽拉伸，保留响应式内边距 -->
+  <main class="container mx-auto px-4 py-16 max-w-7xl">
+    <!-- 一、VR在应急中的运用 -->
+    <section id="vr-application" class="mb-24"> <!-- 移除max-w-4xl mx-auto -->
+      <!-- 标题容器添加响应式内边距，避免贴边 -->
+      <div class="flex items-center mb-8 px-4 md:px-8 lg:px-12">
+        <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-bold mr-4">01</div>
+        <h2 class="text-3xl font-bold text-gray-800">VR在应急中的运用</h2> <!-- 修正标签：原h3改为h2，符合语义 -->
+      </div>
+
+      <!-- 应急场景还原：卡片添加lg:px-12优化宽屏内边距 -->
+      <div class="bg-white rounded-xl shadow-sm p-6 md:p-8 lg:px-12 mb-12">
+        <h3 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+          <i class="fa fa-camera-retro text-primary mr-3"></i>应急事件场景的还原
+        </h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div>
+            <p class="text-gray-600 mb-6 leading-relaxed">
+              VR技术能够提供高度逼真的应急场景模拟，使参与者身临其境地面对突发公共安全事件，从而加强其应急反应和处置能力。通过沉浸式的体验，参与者可以更加深入地理解应急救援的流程和技能，提高他们的实战能力。
+            </p>
+            <div class="flex flex-wrap gap-3">
+              <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">高度逼真</span>
+              <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">沉浸式体验</span>
+              <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">实战模拟</span>
+            </div>
+          </div>
+          <div class="vr-device">
+            <div class="vr-card bg-neutral rounded-xl overflow-hidden shadow-sm">
+              <img src="img/vr1.png" alt="应急场景还原" class="w-full h-64 object-cover">
+              <div class="p-4">
+                <h4 class="font-semibold text-gray-800 mb-2">应急场景还原示例</h4>
+                <p class="text-gray-600 text-sm">
+                  通过VR技术还原火灾、地震、洪水等灾害场景，让参与者在虚拟环境中体验灾害发生过程，学习应对策略。
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 二、编译3D场景的工具 -->
+    <section id="3d-tools" class="mb-24"> <!-- 移除max-w-4xl mx-auto -->
+      <!-- 标题容器添加响应式内边距 -->
+      <div class="flex items-center mb-8 px-4 md:px-8 lg:px-12">
+        <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-bold mr-4">02</div>
+        <h2 class="text-3xl font-bold text-gray-800">编译3D场景的工具</h2> <!-- 修正标签：原h3改为h2 -->
+      </div>
+
+      <!-- 工具介绍：外层添加响应式内边距，确保卡片不贴边 -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12 px-4 md:px-8 lg:px-12">
+        <!-- Unity -->
+        <div class="bg-white rounded-xl shadow-sm p-6 md:p-8 card-hover">
+          <div class="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mb-6 mx-auto">
+            <i class="fa fa-gamepad text-primary text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-800 mb-4 text-center">Unity</h3>
+          <p class="text-gray-600 mb-6">
+            Unity是实时3D互动内容创作和运营平台，包括游戏开发、美术、建筑、汽车设计、影视在内的所有创作者，借助Unity将创意变成现实。在VR领域，Unity可用于构建沉浸式3D场景，支持VR设备的开发与部署。
+          </p>
+          <div class="flex justify-center">
+            <img src="img/vr2.png" alt="Unity界面" class="max-w-full h-auto rounded shadow-sm max-h-64 object-cover">
+          </div>
+        </div>
+
+        <!-- 3ds MAX -->
+        <div class="bg-white rounded-xl shadow-sm p-6 md:p-8 card-hover">
+          <div class="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mb-6 mx-auto">
+            <i class="fa fa-cube text-primary text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-800 mb-4 text-center">3ds MAX</h3>
+          <p class="text-gray-600 mb-6">
+            3ds MAX（3D Studio Max）是基于PC系统的三维动画渲染和制作软件，可以建模、渲染、做动画、特效等，是一款综合全能型三维软件。在VR场景构建中，可用于创建高精度的3D模型，为VR环境提供高质量的视觉素材。
+          </p>
+          <div class="flex justify-center">
+            <img src="img/vr3.png" alt="3ds MAX界面" class="max-w-full h-auto rounded shadow-sm max-h-64 object-cover">
+          </div>
+        </div>
+      </div>
+
+      <!-- 华科楼3D场景展示：卡片添加lg:px-12优化内边距 -->
+      <div class="bg-white rounded-xl shadow-sm p-6 md:p-8 lg:px-12 mb-12">
+        <h3 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+          <i class="fa fa-building text-primary mr-3"></i>3D场景案例：华科楼
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="col-span-1">
+            <p class="text-gray-600 mb-6">
+              基于华科楼的实际建筑结构，使用3ds MAX进行建模，Unity构建VR场景，实现校园环境的虚拟还原。该场景可用于校园应急演练、校园导航等应用场景，为用户提供沉浸式的校园体验。
+            </p>
+          </div>
+          <div class="col-span-2">
+            <div class="rounded-lg overflow-hidden shadow-sm">
+              <img src="img/vr4.png" alt="华科楼3D场景" class="w-full h-80 object-cover img-zoom">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 工具使用流程：卡片添加lg:px-12优化内边距 -->
+      <div class="bg-white rounded-xl shadow-sm p-6 md:p-8 lg:px-12">
+        <h3 class="text-xl font-semibold text-gray-800 mb-6">VR场景构建流程</h3> <!-- 修正标签：原h4改为h3 -->
+        <div class="flex flex-col md:flex-row gap-8">
+          <div class="flex-1">
+            <ol class="space-y-4">
+              <li class="flex items-start">
+                <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold mr-3 flex-shrink-0">1</div>
+                <div>
+                  <h4 class="font-medium text-gray-800 mb-2">需求分析</h4>
+                  <p class="text-gray-600 text-sm">明确VR场景的用途和目标，分析用户需求和使用场景</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold mr-3 flex-shrink-0">2</div>
+                <div>
+                  <h4 class="font-medium text-gray-800 mb-2">3D建模</h4>
+                  <p class="text-gray-600 text-sm">使用3ds MAX等工具创建场景模型，包括建筑、环境等元素</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold mr-3 flex-shrink-0">3</div>
+                <div>
+                  <h4 class="font-medium text-gray-800 mb-2">VR场景构建</h4>
+                  <p class="text-gray-600 text-sm">在Unity中导入模型，添加交互逻辑和VR支持功能</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold mr-3 flex-shrink-0">4</div>
+                <div>
+                  <h4 class="font-medium text-gray-800 mb-2">测试与优化</h4>
+                  <p class="text-gray-600 text-sm">进行VR场景测试，优化性能和用户体验</p>
+                </div>
+              </li>
+            </ol>
+          </div>
+          <div class="flex-1">
+            <div class="mt-6 p-4 bg-neutral rounded-lg">
+              <h4 class="font-medium text-gray-800 mb-2">工具特点对比</h4>
+              <div class="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <h5 class="font-medium text-primary mb-2">Unity</h5> <!-- 修正标签：原h4改为h5 -->
+                  <ul class="space-y-1 text-gray-600">
+                    <li class="flex items-start">
+                      <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                      <span>支持VR设备</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                      <span>可视化编程</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                      <span>跨平台部署</span>
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h5 class="font-medium text-primary mb-2">3ds MAX</h5> <!-- 修正标签：原h4改为h5 -->
+                  <ul class="space-y-1 text-gray-600">
+                    <li class="flex items-start">
+                      <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                      <span>高精度建模</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                      <span>复杂场景构建</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fa fa-check text-green-500 mt-1 mr-2"></i>
+                      <span>材质渲染</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 三、基于VR的未来展望 -->
+    <section id="future-outlook" class="mb-16"> <!-- 移除max-w-4xl mx-auto -->
+      <!-- 标题容器添加响应式内边距 -->
+      <div class="flex items-center mb-8 px-4 md:px-8 lg:px-12">
+        <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-bold mr-4">03</div>
+        <h2 class="text-3xl font-bold text-gray-800">基于VR的未来展望</h2> <!-- 修正标签：原h3改为h2 -->
+      </div>
+
+      <!-- 未来发展方向：卡片添加lg:px-12优化内边距 -->
+      <div class="bg-white rounded-xl shadow-sm p-6 md:p-8 lg:px-12 mb-12">
+        <h3 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+          <i class="fa fa-rocket text-primary mr-3"></i>VR产业优势
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- 多场景 -->
+          <div class="bg-neutral rounded-xl p-6 card-hover">
+            <div class="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mb-6 mx-auto">
+              <i class="fa fa-th text-primary text-2xl"></i>
+            </div>
+            <h4 class="text-lg font-semibold text-gray-800 mb-3 text-center">多场景</h4>
+            <p class="text-gray-600 text-sm text-center">
+              使用相关的编辑器搭建更多的3D场景，与VR相结合，覆盖应急、教育、医疗等多个领域
+            </p>
+          </div>
+
+          <!-- 跨平台合作 -->
+          <div class="bg-neutral rounded-xl p-6 card-hover">
+            <div class="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mb-6 mx-auto">
+              <i class="fa fa-exchange text-primary text-2xl"></i>
+            </div>
+            <h4 class="text-lg font-semibold text-gray-800 mb-3 text-center">跨平台合作</h4>
+            <p class="text-gray-600 text-sm text-center">
+              将VR设备逐渐实现跨平台的融合，实现无缝切换，降低用户的使用成本，提供设备的普及率
+            </p>
+          </div>
+
+          <!-- 体验多元化 -->
+          <div class="bg-neutral rounded-xl p-6 card-hover">
+            <div class="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center mb-6 mx-auto">
+              <i class="fa fa-cubes text-primary text-2xl"></i>
+            </div>
+            <h4 class="text-lg font-semibold text-gray-800 mb-3 text-center">体验多元化</h4>
+            <p class="text-gray-600 text-sm text-center">
+              提供更多的选择，适时更新新的应急场景，并随时进行调整，满足不同用户需求
+            </p>
+          </div>
+        </div>
+
+        <!-- 深度融合方向 -->
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h4 class="font-semibold text-gray-800 mb-4 flex items-center">
+              <i class="fa fa-lightbulb-o text-primary mr-3"></i>与AI深度融合
+            </h4>
+            <p class="text-gray-600 mb-6">
+              与AI（人工智能）深度融合，帮助用户更好的理解虚拟世界，提供更加智慧化的服务。同时也可以为VR内容提供更多的可能性，例如智能生成虚拟角色、场景等。
+            </p>
+            <div class="code-block">
+<pre>// AI与VR融合示例
+// 智能生成虚拟角色
+function generateVirtualCharacters() {
+  // 1. 使用AI模型生成虚拟角色
+  const characterModel = loadAIModel('character_generator');
+  
+  // 2. 根据场景需求生成角色
+  const characters = characterModel.generate({
+    scene: 'earthquake_rescue',
+    count: 5,
+    types: ['victim', 'rescuer', 'doctor']
+  });
+  
+  // 3. 将角色导入VR场景
+  vrScene.addCharacters(characters);
+  
+  // 4. AI驱动角色行为
+  characters.forEach(character => {
+    character.setBehavior(AIBehavior);
+  });
+}</pre>
+            </div>
+          </div>
+          <div>
+            <h4 class="font-semibold text-gray-800 mb-4 flex items-center">
+              <i class="fa fa-visualization text-primary mr-3"></i>可视化与仿真化
+            </h4>
+            <div class="grid grid-cols-2 gap-4 mb-6">
+              <div class="bg-neutral rounded-lg p-4">
+                <h5 class="font-medium text-gray-800 mb-2">可视化</h5>
+                <p class="text-sm text-gray-600">
+                  在搭建场景前可以利用VR技术对整个场景进行推敲演示，分析各场景优劣，避免失误
+                </p>
+              </div>
+              <div class="bg-neutral rounded-lg p-4">
+                <h5 class="font-medium text-gray-800 mb-2">高度仿真化</h5>
+                <p class="text-sm text-gray-600">
+                  VR技术能更好的展示灾害发生的场景，高度还原更多的灾害事故
+                </p>
+              </div>
+            </div>
+            <div class="bg-neutral rounded-lg p-4">
+              <h5 class="font-medium text-gray-800 mb-2">多维度融合</h5>
+              <p class="text-sm text-gray-600">
+                结合5G、云计算等技术，实现VR场景的实时渲染和远程共享，支持多人同时在线参与VR体验
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 页脚（与首页完全一致） -->
+<footer class="bg-gray-300 py-6">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row justify-between items-center">
+      <!-- 左侧文字 -->
+      <div class="text-gray-600 mb-4 md:mb-0">
+        DESIGN by E&T Lab
+      </div>
+      
+      <!-- 右侧版权信息 -->
+      <div class="text-gray-600 flex flex-col md:flex-row items-center gap-2 md:gap-4">
+        <span>Copyright © 2023</span>
+        <a href="https://talentyui.github.io" target="_blank" class="text-primary hover:underline">talentyui.github.io</a>
+        <span>|</span>
+        <a href="https://beian.miit.gov.cn" target="_blank" class="text-primary hover:underline">京ICP备2023003741号-2</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+  <script>
+    // 移动端菜单切换（与首页一致）
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+    
+    // 导航链接激活状态切换（与首页一致）
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        
+        if (!mobileMenu.classList.contains('hidden')) {
+          mobileMenu.classList.add('hidden');
+        }
+      });
+    });
+    
+    // 滚动时导航栏样式变化（与首页一致）
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('header');
+      if (window.scrollY > 10) {
+        header.classList.add('bg-white/95', 'backdrop-blur-sm');
+        header.classList.remove('bg-white');
+      } else {
+        header.classList.add('bg-white');
+        header.classList.remove('bg-white/95', 'backdrop-blur-sm');
+      }
+    });
+    
+    // 平滑滚动（新增，优化锚点跳转体验）
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
